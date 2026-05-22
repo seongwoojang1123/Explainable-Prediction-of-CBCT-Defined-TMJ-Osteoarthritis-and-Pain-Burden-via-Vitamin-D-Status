@@ -6,13 +6,6 @@ Three-panel figure:
   B. Vitamin D level by VAS group ≤5 vs ≥6 (box-scatter)
   C. Vitamin D vs VAS scatter plot with Spearman correlation
 
-Usage
------
-    python 5_figure5_vitaminD_VAS.py
-
-Output
-------
-    outputs/Figure5_VitaminD_and_VAS.png
 """
 
 import warnings
