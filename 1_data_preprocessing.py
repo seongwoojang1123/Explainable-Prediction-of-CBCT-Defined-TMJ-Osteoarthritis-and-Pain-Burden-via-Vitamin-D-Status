@@ -5,9 +5,9 @@ Loads the raw CSV, renames psychological variables, recodes sex,
 ensures binary variables are numeric 0/1, and creates derived columns
 (log-transformed symptom duration, GSI fallback).
 
+"""
 
 from config import OUTDIR, load_and_prepare_data
-
 
 if __name__ == "__main__":
     df = load_and_prepare_data()
