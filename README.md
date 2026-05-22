@@ -1,4 +1,4 @@
-# Association of Vitamin D Deficiency with TMJ Osteoarthritis and Pain Intensity: A Clinical and Machine Learning Approach
+# Serum Vitamin D Status as a Candidate Biomarker for CBCT-Defined Temporomandibular Joint Osteoarthritis, Pain Burden, and Explainable Prediction 
 
 This repository contains the official analysis code for the study  
 **"Association of Vitamin D Deficiency with TMJ Osteoarthritis and Pain Intensity"**  
@@ -157,6 +157,9 @@ For any inquiries or collaboration opportunities:
 
 - Yeon-Hee Lee: omod0209@gmail.com
 - Seongwoo Jang: mook8105@koreacu.ac.kr
+- Seonggwang Jeon: qq22512@hanyang.ac.kr
+- Tae-Seok Kim: taiseok11@naver.com
+- Sang-woo Lee: goodman23@snu.ac.kr
 
 ## Acknowledgments
 
