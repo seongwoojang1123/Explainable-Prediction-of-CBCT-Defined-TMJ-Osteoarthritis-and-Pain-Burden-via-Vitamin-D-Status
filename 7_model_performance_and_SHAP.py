@@ -7,14 +7,6 @@ Figure 3: ROC / calibration curve images are maintained separately.
 Figure 4: SHAP summary – placeholder instructions for when the
          raw SHAP plotting table becomes available.
 
-Usage
------
-    python 7_model_performance_and_SHAP.py
-
-Outputs
--------
-    outputs/Table4_model_performance_summary.csv
-    outputs/Figure4_SHAP_placeholder.txt
 """
 
 import pandas as pd
