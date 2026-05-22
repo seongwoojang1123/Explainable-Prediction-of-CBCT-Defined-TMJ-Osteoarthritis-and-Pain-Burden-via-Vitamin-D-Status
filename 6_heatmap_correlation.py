@@ -7,17 +7,6 @@ Generates Spearman-based heat maps for:
 
 Each map includes only variables that pass p < 0.05 screening.
 
-Usage
------
-    python 6_heatmap_correlation.py
-
-Outputs
--------
-    outputs/Heatmap_VAS_significant_factors.png
-    outputs/Heatmap_VAS_significant_factors.screening.csv
-    outputs/Heatmap_VAS_significant_factors.corr.csv
-    outputs/Heatmap_VAS_significant_factors.pval.csv
-    outputs/Heatmap_TMJOA_severity_significant_factors.png   (+ .screening / .corr / .pval)
 """
 
 import warnings
