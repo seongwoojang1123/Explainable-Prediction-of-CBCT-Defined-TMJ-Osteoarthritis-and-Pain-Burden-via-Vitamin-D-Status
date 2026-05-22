@@ -5,13 +5,6 @@ Six-panel box-and-scatter figure (3 × 2 grid).
 Left column: Non-TMJ OA vs TMJ OA (Mann–Whitney U).
 Right column: Grade 0 vs 1 vs 2 (Kruskal–Wallis).
 
-Usage
------
-    python 4_figure2_boxplots.py
-
-Output
-------
-    outputs/Figure2_VitD_ESR_GSI.png
 """
 
 import warnings
