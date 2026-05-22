@@ -4,13 +4,6 @@
 Compares continuous and categorical variables between
 Non-TMJ OA and TMJ OA groups, with Bonferroni correction.
 
-Usage
------
-    python 2_table1_baseline_characteristics.py
-
-Output
-------
-    outputs/Table1_baseline_characteristics.csv
 """
 
 import warnings
