@@ -6,14 +6,6 @@ Table 2: Association of vitamin D with TMJ OA presence (binary logistic)
 Table 3: Association of vitamin D with pain intensity VAS
         (OLS with HC3 robust SE).
 
-Usage
------
-    python 3_table2_table3_regression_analysis.py
-
-Outputs
--------
-    outputs/Table2_vitaminD_TMJOA_presence_severity.csv
-    outputs/Table3_vitaminD_and_VAS.csv
 """
 
 import warnings
