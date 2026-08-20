@@ -1,29 +1,32 @@
 # Serum Vitamin D Status in CBCT-Defined Temporomandibular Joint Osteoarthritis: Associations with Structural Severity and Pain Burden
 
-This repository contains the official analysis code for the study  
+This repository contains the official analysis code for the study
 **"Serum Vitamin D Status in CBCT-Defined Temporomandibular Joint Osteoarthritis: Associations with Structural Severity and Pain Burden — A Retrospective Cross-Sectional Study"**
 by Yeon-Hee Lee, Seongwoo Jang, and colleagues.
 
-The repository includes data preprocessing, statistical analysis, visualization, and machine learning evaluation modules for investigating the role of vitamin D in temporomandibular joint osteoarthritis (TMJ OA) presence, severity, and pain intensity.
+The repository includes data preprocessing, statistical analysis, visualization, and machine learning evaluation modules for investigating the role of serum vitamin D in temporomandibular joint osteoarthritis (TMJ OA) presence, severity, and pain intensity.
 
 This work primarily leverages multivariable regression approaches (binary logistic, ordinal logistic, and robust OLS) alongside machine learning models (Elastic Net, XGBoost) with SHAP-based interpretability, applied to clinical, laboratory, and psychological assessment data.
 
 ## Project Overview
 
-Vitamin D deficiency has been implicated in various musculoskeletal and inflammatory conditions, yet its specific role in TMJ osteoarthritis remains underexplored.  
+Low vitamin D status has been implicated in various musculoskeletal and inflammatory conditions, yet its specific role in TMJ osteoarthritis remains underexplored.
 This project investigates:
 
-- The association between vitamin D levels and TMJ OA **presence** (binary logistic regression)
+- The association between vitamin D levels and CBCT-defined TMJ OA **presence** (binary logistic regression)
 - The association between vitamin D levels and TMJ OA **severity** (ordinal logistic regression)
 - The relationship between vitamin D and **pain intensity** (VAS) with robust standard errors
-- Predictive model performance comparing feature sets with and without vitamin D
+- Predictive model performance comparing nested feature sets with and without vitamin D, evaluated in a held-out test set
 - SHAP-based feature importance for model interpretability
+
+Continuous serum 25(OH)D is the primary exposure; low vitamin D status (< 30 ng/mL, encompassing deficiency and insufficiency) is analyzed as a secondary categorical exposure.
 
 Key aspects include:
 - Comprehensive baseline comparison (Mann–Whitney U, Chi-squared, Fisher's exact) with Bonferroni correction
 - Adjusted regression analyses controlling for age, sex, symptom duration, ESR, RF, zinc, GSI, and clinical symptoms
 - Spearman correlation-based screening with significance-filtered heat maps
-- Cross-validated Elastic Net and XGBoost model performance (AUROC, AUPRC, Brier score, calibration metrics)
+- Internal holdout evaluation of Elastic Net and XGBoost models: a prespecified stratified 80:20 train-test split, with 5-fold stratified cross-validation inside the training set for internal performance assessment (model hyperparameters were fixed, not tuned), and all reported performance metrics computed in the held-out test set (AUROC with bootstrap 95% CI, AUPRC, Brier score, calibration intercept/slope, sensitivity, specificity)
+- DeLong paired ROC comparisons between nested models, with Holm adjustment across the two principal vitamin D incremental comparisons
 
 ## Repository Structure
 
@@ -46,7 +49,7 @@ Key aspects include:
   - Bonferroni-adjusted p-values for multiple comparison correction
 
 - **3_table2_table3_regression_analysis.py**
-  - Table 2: adjusted binary logistic regression (TMJ OA presence) and ordinal logistic regression (TMJ OA severity) for vitamin D (per 10 ng/mL) and vitamin D deficiency
+  - Table 2: adjusted binary logistic regression (TMJ OA presence) and ordinal logistic regression (TMJ OA severity) for vitamin D (per 10 ng/mL) and low vitamin D status
   - Table 3: adjusted OLS regression with HC3-robust standard errors for VAS ~ vitamin D association
   - Both models include full covariate adjustment (age, sex, ESR, RF, zinc, GSI, clinical symptoms)
 
@@ -54,28 +57,28 @@ Key aspects include:
   - Figure 2: 3 × 2 box-and-scatter panel (Vitamin D, ESR, GSI)
   - Left column: Non-TMJ OA vs TMJ OA (Mann–Whitney U p-values)
   - Right column: Grade 0 vs 1 vs 2 (Kruskal–Wallis p-values)
-  - Panel labels (a–f) with publication-quality formatting
 
 - **5_figure5_vitaminD_VAS.py**
   - Figure 5: three-panel analysis of vitamin D and pain intensity
-  - Panel A: VAS by vitamin D deficiency status (box-scatter)
+  - Panel A: VAS by low vitamin D status (box-scatter)
   - Panel B: Vitamin D level by VAS group (≤5 vs ≥6)
   - Panel C: Scatter plot with linear fit and Spearman correlation
 
 - **6_heatmap_correlation.py**
   - Spearman correlation screening (p < 0.05 threshold)
-  - Heat map 1: factors significantly associated with VAS
-  - Heat map 2: factors significantly associated with TMJ OA severity
-  - Companion CSVs: screening results, full correlation matrices, p-value matrices
+  - Heat maps of factors associated with VAS and with TMJ OA severity
+
+- **8_final_holdout_ml_evaluation.py**
+  - Full machine learning pipeline reported in the manuscript
+  - Stratified 80:20 split; 5-fold stratified CV within the training set; median imputation inside each pipeline; Elastic Net (StandardScaler, l1_ratio = 0.5) and XGBoost (80 estimators, depth 3, learning rate 0.30, subsample 0.80, colsample 0.80, L2 = 1.0)
+  - Held-out test metrics, bootstrap AUROC CIs (2000 iterations), calibration intercept/slope
+  - DeLong paired comparisons with Holm adjustment for the two principal comparisons
+  - SHAP analysis of the final Block-4 XGBoost model (importance table + raw plotting table)
+  - Exports held-out per-patient predictions for full reproducibility
 
 - **7_model_performance_and_SHAP.py**
-  - Table 4: cross-validated model performance summary (Elastic Net, XGBoost)
-  - Four incremental feature sets: Clinical only → +Labs → +Vitamin D → +GSI
-  - Metrics: AUROC, AUPRC, Brier score, calibration intercept/slope, sensitivity, specificity
-  - SHAP placeholder with instructions for reproducing Figure 4 when raw data becomes available
-
-- **README.md**
-  - Project overview, setup guide, and usage instructions
+  - Formats Table 4 and the SHAP importance table from the outputs of script 8
+  - Contains no manually entered performance values
 
 ## Models Used
 
@@ -85,28 +88,27 @@ Key aspects include:
   - OLS regression with HC3-robust standard errors (VAS pain intensity)
 
 - **Machine Learning Models**
-  - Elastic Net: L1/L2 regularized logistic regression for sparse feature selection
-  - XGBoost: gradient-boosted decision trees for nonlinear classification
-  - Both models evaluated via stratified repeated k-fold cross-validation
+  - Elastic Net: L1/L2 regularized logistic regression
+  - XGBoost: gradient-boosted decision trees
+  - Both models evaluated by internal holdout evaluation: a stratified 80:20 train-test split with 5-fold stratified cross-validation inside the training set; all reported metrics computed in the held-out test set
 
 - **Interpretability**
-  - SHAP (SHapley Additive exPlanations) for feature importance and interaction analysis
-  - Calibration assessment (intercept, slope) for clinical reliability
+  - SHAP (SHapley Additive exPlanations) for feature importance of the final Block-4 XGBoost model
+  - Calibration assessment (intercept, slope)
 
 ## Evaluation
 
 - Performance Metrics
-  - AUROC (with 95% CI)
+  - AUROC (bootstrap 95% CI, 2000 iterations)
   - AUPRC (area under precision–recall curve)
-  - Brier score (calibration)
+  - Brier score
   - Calibration intercept and slope
-  - Sensitivity and specificity
+  - Sensitivity and specificity (threshold 0.50)
 
 - Statistical Comparisons
-  - Mann–Whitney U test for continuous variables
-  - Chi-squared / Fisher's exact test for categorical variables
-  - Kruskal–Wallis test for multi-group comparisons
-  - Bonferroni correction for multiple testing
+  - Mann–Whitney U / Chi-squared / Fisher's exact / Kruskal–Wallis tests
+  - Bonferroni correction (baseline comparisons)
+  - DeLong paired ROC comparisons; Holm adjustment across the two principal vitamin D incremental comparisons
   - Spearman rank correlation with significance screening
 
 ## Requirements
@@ -117,13 +119,10 @@ pandas
 scipy
 statsmodels
 matplotlib
-```
-
-Optional (for extended ML pipeline):
-```
 scikit-learn
 xgboost
 shap
+openpyxl
 ```
 
 ## Usage
@@ -147,7 +146,10 @@ python 5_figure5_vitaminD_VAS.py
 # Step 6: Correlation heat maps
 python 6_heatmap_correlation.py
 
-# Step 7: Model performance summary & SHAP placeholder
+# Step 7: Full ML pipeline (Table 4, Table S3, Table S4, SHAP)
+python 8_final_holdout_ml_evaluation.py
+
+# Step 8: Format the performance and SHAP tables
 python 7_model_performance_and_SHAP.py
 ```
 
