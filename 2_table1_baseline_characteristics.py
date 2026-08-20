@@ -36,7 +36,7 @@ def build_table1(df):
 
     categorical = [
         ("Sex, female",          "Sex_female_bin",         1, "chi2"),
-        ("Vitamin D deficiency", "VitaminD_deficiency01",  1, "chi2"),
+        ("Low vitamin D status", "VitaminD_deficiency01",  1, "chi2"),
         ("Elevated RF",          "RF_elevated01",          1, "fisher"),
         ("TMJ noise",            "TMJ_noise",              1, "chi2"),
         ("Muscle stiffness",     "Muscle_stiffness",       1, "chi2"),
