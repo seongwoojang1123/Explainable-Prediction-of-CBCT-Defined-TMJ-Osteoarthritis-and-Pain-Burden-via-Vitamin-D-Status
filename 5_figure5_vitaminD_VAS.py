@@ -2,7 +2,7 @@
 5. Figure 5 – Vitamin D and Pain Intensity (VAS)
 =================================================
 Three-panel figure:
-  A. VAS by vitamin D deficiency status (box-scatter)
+  A. VAS by low vitamin D status (box-scatter)
   B. Vitamin D level by VAS group ≤5 vs ≥6 (box-scatter)
   C. Vitamin D vs VAS scatter plot with Spearman correlation
 
@@ -29,7 +29,7 @@ def make_figure5(df):
     p = mann_whitney_p(g_non, g_def)
     simple_box_scatter(ax1, [g_non, g_def], ["Non-deficient", "Deficient"],
                        ylabel="Pain intensity (VAS)", p_text=f"p = {p:.4g}")
-    ax1.set_xlabel("Vitamin D deficiency status")
+    ax1.set_xlabel("Low vitamin D status")
     ax1.text(-0.18, 1.03, "A", transform=ax1.transAxes, fontsize=16, fontweight="bold")
 
     # ── B. Vitamin D by VAS group ────────────────────────────────────────
