@@ -51,7 +51,7 @@ def build_table2(df):
         p    = model.pvalues[exp_col]
         results.append({
             "Outcome":  "TMJ OA presence",
-            "Exposure": "Vitamin D per 10 ng/mL" if exposure == "VitaminD" else "Vitamin D deficiency",
+            "Exposure": "Vitamin D per 10 ng/mL" if exposure == "VitaminD" else "Low vitamin D status",
             "Model":    "Adjusted logistic regression",
             "Beta": beta, "OR": np.exp(beta),
             "CI_low": np.exp(beta - 1.96 * se),
@@ -76,7 +76,7 @@ def build_table2(df):
         p    = fit.pvalues[exp_col]
         results.append({
             "Outcome":  "TMJ OA severity",
-            "Exposure": "Vitamin D per 10 ng/mL" if exposure == "VitaminD" else "Vitamin D deficiency",
+            "Exposure": "Vitamin D per 10 ng/mL" if exposure == "VitaminD" else "Low vitamin D status",
             "Model":    "Adjusted ordinal logistic regression",
             "Beta": beta, "OR": np.exp(beta),
             "CI_low": np.exp(beta - 1.96 * se),
@@ -119,12 +119,12 @@ def build_table3(df):
         "p_value": p,
     })
 
-    # Vitamin D deficiency (binary)
+    # Low vitamin D status (binary)
     X   = sm.add_constant(dat[["VitaminD_deficiency01"] + covars])
     fit = sm.OLS(dat["VAS"], X).fit(cov_type="HC3")
     beta, se, p = fit.params["VitaminD_deficiency01"], fit.bse["VitaminD_deficiency01"], fit.pvalues["VitaminD_deficiency01"]
     rows.append({
-        "Predictor": "Vitamin D deficiency",
+        "Predictor": "Low vitamin D status",
         "Beta": beta, "CI_low": beta - 1.96 * se, "CI_high": beta + 1.96 * se,
         "p_value": p,
     })
