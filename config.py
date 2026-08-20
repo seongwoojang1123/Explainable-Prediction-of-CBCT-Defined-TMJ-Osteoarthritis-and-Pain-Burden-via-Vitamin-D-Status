@@ -47,7 +47,7 @@ PRETTY = {
     "Zinc": "Zinc",
     "DEP": "DEP",
     "RF_elevated01": "Elevated RF",
-    "VitaminD_deficiency01": "Vitamin D deficiency",
+    "VitaminD_deficiency01": "Low vitamin D status",
     "ESR_elevated01": "Elevated ESR",
     "Zinc_deficiency01": "Zinc deficiency",
     "DEP_increased": "DEP increased",
@@ -83,9 +83,11 @@ def load_and_prepare_data(path=DATA_PATH):
         if old in df.columns and new not in df.columns:
             df[new] = pd.to_numeric(df[old], errors="coerce")
 
-    # Force numeric where relevant
+    # Force numeric where relevant (pandas>=2.2 compatible)
     for col in df.columns:
-        df[col] = pd.to_numeric(df[col], errors="ignore")
+        converted = pd.to_numeric(df[col], errors="coerce")
+        if converted.notna().sum() >= df[col].notna().sum():
+            df[col] = converted
 
     # Recode sex (1=male, 2=female → 0/1)
     if "Sex_female" in df.columns:
