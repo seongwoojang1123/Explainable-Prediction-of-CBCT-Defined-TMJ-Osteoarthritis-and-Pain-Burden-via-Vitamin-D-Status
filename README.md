@@ -67,6 +67,10 @@ Key aspects include:
 - **6_heatmap_correlation.py**
   - Spearman correlation screening (p < 0.05 threshold)
   - Heat maps of factors associated with VAS and with TMJ OA severity
+ 
+- **7_model_performance_and_SHAP.py**
+  - Formats Table 4 and the SHAP importance table from the outputs of script 8
+  - Contains no manually entered performance values
 
 - **8_final_holdout_ml_evaluation.py**
   - Full machine learning pipeline reported in the manuscript
@@ -76,9 +80,6 @@ Key aspects include:
   - SHAP analysis of the final Block-4 XGBoost model (importance table + raw plotting table)
   - Exports held-out per-patient predictions for full reproducibility
 
-- **7_model_performance_and_SHAP.py**
-  - Formats Table 4 and the SHAP importance table from the outputs of script 8
-  - Contains no manually entered performance values
 
 ## Models Used
 
