@@ -1,71 +1,53 @@
 """
-7. Model Performance Summary & SHAP Placeholder
-================================================
-Table 4: Manually entered model-performance metrics from the
-         cross-validated Elastic Net and XGBoost experiments.
-Figure 3: ROC / calibration curve images are maintained separately.
-Figure 4: SHAP summary – placeholder instructions for when the
-         raw SHAP plotting table becomes available.
+7. Model Performance Summary & SHAP Table Formatting
+=====================================================
+Formats Table 4 and the SHAP importance table from the outputs of
+`8_final_holdout_ml_evaluation.py`. No performance values are entered
+manually: this script only reads and formats the computed results, so
+the repository tables always match the executed analysis.
 
+Run order:
+    python 8_final_holdout_ml_evaluation.py   # computes everything
+    python 7_model_performance_and_SHAP.py    # formats the tables
 """
 
 import pandas as pd
 from config import OUTDIR
 
-
-# ── Table 4 ──────────────────────────────────────────────────────────────────
-
-def write_table4():
-    rows = [
-        ["Elastic Net", "Clinical only",                        0.515, 0.573, 0.253,  0.078, 0.246, 0.581, 0.457],
-        ["Elastic Net", "Clinical + labs without Vitamin D",     0.543, 0.595, 0.253,  0.069, 0.309, 0.581, 0.448],
-        ["Elastic Net", "Clinical + labs + Vitamin D",           0.729, 0.752, 0.216, -0.002, 0.868, 0.735, 0.552],
-        ["Elastic Net", "Clinical + labs + Vitamin D + GSI",     0.740, 0.753, 0.211, -0.003, 0.851, 0.744, 0.571],
-        ["XGBoost",     "Clinical only",                        0.493, 0.511, 0.253,  0.131,-0.188, 0.701, 0.267],
-        ["XGBoost",     "Clinical + labs without Vitamin D",     0.518, 0.542, 0.251,  0.068, 0.265, 0.752, 0.314],
-        ["XGBoost",     "Clinical + labs + Vitamin D",           0.727, 0.766, 0.206, -0.060, 1.724, 0.573, 0.705],
-        ["XGBoost",     "Clinical + labs + Vitamin D + GSI",     0.755, 0.798, 0.204, -0.033, 1.755, 0.632, 0.781],
-    ]
-    cols = [
-        "Algorithm", "Model", "AUROC", "AUPRC", "Brier_score",
-        "Calibration_intercept", "Calibration_slope",
-        "Sensitivity", "Specificity",
-    ]
-    table4 = pd.DataFrame(rows, columns=cols)
-    out_path = OUTDIR / "Table4_model_performance_summary.csv"
-    table4.to_csv(out_path, index=False)
-    print(f"Table 4 saved → {out_path}")
+PERF = OUTDIR / "Table4_model_performance.csv"
+SHAP = OUTDIR / "TableS4_shap_importance.csv"
 
 
-# ── Figure 4 placeholder ────────────────────────────────────────────────────
-
-def write_shap_placeholder():
-    txt = """\
-Figure 4 – SHAP Visualization Placeholder
-------------------------------------------
-Required files to reproduce SHAP figures programmatically:
-
-1. Long-format SHAP plotting table (CSV):
-   - feature, shap_value, feature_value
-
-2. Optional feature-importance table (CSV):
-   - feature, mean_abs_shap
-
-Suggested outputs:
-   - Figure4_SHAP_summary.png
-   - Figure4_SHAP_violin.png
-
-Note: The current workspace contains final SHAP images
-but not the raw plotting table.  When available, add the
-SHAP CSV to data/ and extend this script accordingly.
-"""
-    out_path = OUTDIR / "Figure4_SHAP_placeholder.txt"
-    out_path.write_text(txt)
-    print(f"SHAP placeholder saved → {out_path}")
+def format_table4():
+    if not PERF.exists():
+        raise SystemExit(
+            f"{PERF} not found. Run 8_final_holdout_ml_evaluation.py first.")
+    df = pd.read_csv(PERF)
+    df["AUROC (95% CI)"] = df.apply(
+        lambda r: f"{r['AUROC']:.3f} ({r['AUROC_CI_low']:.3f}"
+                  f"\u2013{r['AUROC_CI_high']:.3f})", axis=1)
+    cols = ["Algorithm", "Model", "AUROC (95% CI)", "AUPRC", "Brier_score",
+            "Calibration_intercept", "Calibration_slope",
+            "Sensitivity", "Specificity"]
+    out = df[cols].round(3)
+    path = OUTDIR / "Table4_formatted.csv"
+    out.to_csv(path, index=False)
+    print(f"Table 4 (formatted) saved \u2192 {path}")
+    print(out.to_string(index=False))
 
 
-# ── Main ─────────────────────────────────────────────────────────────────────
+def format_shap():
+    if not SHAP.exists():
+        print(f"{SHAP} not found \u2014 run script 8 with shap installed "
+              f"to generate the SHAP tables.")
+        return
+    imp = pd.read_csv(SHAP).round(3)
+    path = OUTDIR / "TableS4_formatted.csv"
+    imp.to_csv(path, index=False)
+    print(f"\nSHAP importance table saved \u2192 {path}")
+    print(imp.to_string(index=False))
+
 
 if __name__ == "__main__":
-    write_table4()
-    write_shap_placeholder()
+    format_table4()
+    format_shap()
