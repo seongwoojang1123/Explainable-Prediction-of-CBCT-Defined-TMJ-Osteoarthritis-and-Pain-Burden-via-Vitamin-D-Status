@@ -1,7 +1,7 @@
-# Serum Vitamin D Status as a Candidate Biomarker for CBCT-Defined Temporomandibular Joint Osteoarthritis, Pain Burden, and Explainable Prediction 
+# Serum Vitamin D Status in CBCT-Defined Temporomandibular Joint Osteoarthritis: Associations with Structural Severity and Pain Burden
 
 This repository contains the official analysis code for the study  
-**"Association of Vitamin D Deficiency with TMJ Osteoarthritis and Pain Intensity"**  
+**"Serum Vitamin D Status in CBCT-Defined Temporomandibular Joint Osteoarthritis: Associations with Structural Severity and Pain Burden — A Retrospective Cross-Sectional Study"**
 by Yeon-Hee Lee, Seongwoo Jang, and colleagues.
 
 The repository includes data preprocessing, statistical analysis, visualization, and machine learning evaluation modules for investigating the role of vitamin D in temporomandibular joint osteoarthritis (TMJ OA) presence, severity, and pain intensity.
